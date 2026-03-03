@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wambua Family Union and Savings</title>
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        background: linear-gradient(to right, #0f4c81, #3a86ff);
+        text-align: center;
+        color: white;
+    }
+
+    header {
+        padding: 20px;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .card {
+        background: white;
+        color: #0f4c81;
+        width: 95%;
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    input {
+        padding: 10px;
+        width: 80%;
+        margin: 5px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 8px;
+        background-color: #0f4c81;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .box {
+        padding: 25px;
+        border-radius: 12px;
+        background-color: #e6f0ff;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .box:hover {
+        background-color: #b3d1ff;
+    }
+
+    .selected {
+        background-color: #0f4c81;
+        color: white;
+    }
+
+    .list {
+        text-align: left;
+        margin-top: 20px;
+        background: #f1f7ff;
+        padding: 15px;
+        border-radius: 10px;
+        color: #0f4c81;
+    }
+
+    footer {
+        margin-top: 20px;
+        padding-bottom: 15px;
+        font-size: 14px;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    Wambua Family Union and Savings
+</header>
+
+<div class="card">
+
+    <h3>Select Up To 3 Numbers (1 - 12)</h3>
+
+    <input type="text" id="username" placeholder="Enter your name" required><br>
+    <input type="text" id="phone" placeholder="Enter phone number to receive funds" required><br>
+
+    <button onclick="clearSelection()">Clear Selection</button>
+
+    <div class="container" id="numberContainer"></div>
+
+    <div class="list">
+        <h4>📋 Public Selection List</h4>
+        <ul id="selectionList"></ul>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 Wambua Family Union and Savings
+</footer>
+
+<script>
+    const container = document.getElementById("numberContainer");
+    const selectionList = document.getElementById("selectionList");
+    const maxSelections = 3;
+
+    let selectedNumbers = [];
+
+    // Create numbers 1–12
+    for (let i = 1; i <= 12; i++) {
+        const box = document.createElement("div");
+        box.classList.add("box");
+        box.innerText = i;
+        box.dataset.number = i;
+        box.addEventListener("click", () => selectNumber(box));
+        container.appendChild(box);
+    }
+
+    function selectNumber(box) {
+        const name = document.getElementById("username").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const number = box.dataset.number;
+
+        if (name === "" || phone === "") {
+            alert("Please enter your name and phone number.");
+            return;
+        }
+
+        if (box.classList.contains("selected")) {
+            alert("This number is already taken.");
+            return;
+        }
+
+        if (selectedNumbers.length >= maxSelections) {
+            alert("You can only select up to 3 numbers.");
+            return;
+        }
+
+        selectedNumbers.push(number);
+        box.classList.add("selected");
+        box.innerHTML = name + "<br>" + phone;
+
+        addToList(number, name, phone);
+    }
+
+    function addToList(number, name, phone) {
+        const li = document.createElement("li");
+        li.textContent = "Number " + number + " - " + name + " (" + phone + ")";
+        selectionList.appendChild(li);
+    }
+
+    function clearSelection() {
+        selectedNumbers = [];
+        selectionList.innerHTML = "";
+
+        const boxes = document.querySelectorAll(".box");
+        boxes.forEach(box => {
+            box.classList.remove("selected");
+            box.innerText = box.dataset.number;
+        });
+    }
+</script>
+
+</body>
+</html>
